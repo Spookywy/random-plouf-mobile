@@ -1,10 +1,9 @@
-import { Button } from "@/components/button";
+import { Button } from "@/components/designSystem/button";
+import { COLORS, FONT_SIZE, SPACING } from "@/components/designSystem/styles";
 import { Participant } from "@/components/participant";
-import { COLORS, FONT_SIZE, SPACING } from "@/components/styles";
 import { INITIAL_NUMBER_OF_PARTICIPANTS } from "@/utils/constants";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const [participantsNames, setParticipantsNames] = useState<Array<string>>(
@@ -49,12 +48,14 @@ export default function Index() {
           />
         ))}
       </ScrollView>
-      <Pressable style={styles.addParticipantButton} onPress={addParticipant}>
-        <FontAwesome6 name="user-plus" size={16} color="white" />
-      </Pressable>
+      <Button
+        iconName="user-plus"
+        onPress={addParticipant}
+        style={styles.addParticipantButton}
+      />
       <View style={styles.buttonsWrapper}>
-        <Button label="Tirer au sort" />
-        <Button label="Créer 2 équipes" />
+        <Button label="Tirer au sort" onPress={() => {}} />
+        <Button label="Créer 2 équipes" onPress={() => {}} />
       </View>
     </View>
   );
@@ -88,11 +89,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addParticipantButton: {
-    backgroundColor: COLORS.grey,
     borderRadius: 30,
     width: 40,
     height: 40,
     justifyContent: "center",
+    paddingHorizontal: 0,
+    paddingVertical: 0,
     alignItems: "center",
     marginTop: SPACING.m,
   },

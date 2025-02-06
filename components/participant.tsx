@@ -1,6 +1,6 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
-import { COLORS, FONT_SIZE, SPACING } from "./styles";
+import { COLORS, FONT_SIZE, SPACING } from "./designSystem/styles";
 
 type ParticipantProps = {
   name: string;

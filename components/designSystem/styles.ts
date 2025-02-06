@@ -1,7 +1,7 @@
 export const COLORS = {
   nightGrey: "#171717",
   grey: "#3F3F46",
-  white: "#FFFFFF",
+  white: "#F5F5F5",
   purple: "#8b5cf6",
 };
 
