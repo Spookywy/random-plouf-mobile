@@ -1,5 +1,6 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { COLORS, FONT_SIZE, SPACING } from "./styles";
 
 type ParticipantProps = {
   name: string;
@@ -23,7 +24,7 @@ export function Participant({
         placeholder={`Participant ${index + 1}`}
       />
       <Pressable onPress={handleDelete}>
-        <FontAwesome6 name="trash" size={15} color="white" />
+        <FontAwesome6 name="trash" size={16} color={COLORS.white} />
       </Pressable>
     </View>
   );
@@ -33,14 +34,15 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: SPACING.l,
   },
   input: {
+    fontSize: FONT_SIZE.s,
     borderWidth: 1,
-    width: 200,
-    height: 40,
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: "white",
+    width: 250,
+    height: 50,
+    borderRadius: 12,
+    padding: 12,
+    backgroundColor: COLORS.white,
   },
 });

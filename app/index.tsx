@@ -1,8 +1,10 @@
+import { Button } from "@/components/button";
 import { Participant } from "@/components/participant";
+import { COLORS, FONT_SIZE, SPACING } from "@/components/styles";
 import { INITIAL_NUMBER_OF_PARTICIPANTS } from "@/utils/constants";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const [participantsNames, setParticipantsNames] = useState<Array<string>>(
@@ -28,8 +30,13 @@ export default function Index() {
   return (
     <View style={styles.mainView}>
       <Text style={styles.title}>RanDOM Plouf</Text>
-      <Text style={styles.text}>Ajouter des participants</Text>
-      <View style={styles.participants}>
+      <Text style={styles.description}>Ajouter des participants</Text>
+
+      <ScrollView
+        contentContainerStyle={styles.participantList}
+        style={styles.participantListWrapper}
+        showsVerticalScrollIndicator={false}
+      >
         {participantsNames.map((name, index) => (
           <Participant
             key={index}
@@ -41,10 +48,14 @@ export default function Index() {
             handleDelete={() => removeParticipant(index)}
           />
         ))}
-      </View>
+      </ScrollView>
       <Pressable style={styles.addParticipantButton} onPress={addParticipant}>
-        <FontAwesome6 name="user-plus" size={15} color="white" />
+        <FontAwesome6 name="user-plus" size={16} color="white" />
       </Pressable>
+      <View style={styles.buttonsWrapper}>
+        <Button label="Tirer au sort" />
+        <Button label="Créer 2 équipes" />
+      </View>
     </View>
   );
 }
@@ -53,22 +64,41 @@ const styles = StyleSheet.create({
   mainView: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#171717",
+    backgroundColor: COLORS.nightGrey,
+    paddingVertical: 12,
   },
   title: {
-    fontSize: 30,
+    fontSize: FONT_SIZE.xxl,
     fontWeight: "bold",
-    color: "#8b5cf6",
+    color: COLORS.purple,
+    paddingBottom: SPACING.l,
   },
-  text: {
-    color: "white",
+  description: {
+    color: COLORS.white,
+    fontSize: FONT_SIZE.m,
+    fontWeight: "bold",
+    paddingBottom: SPACING.m,
   },
-  participants: {
-    gap: 5,
+  participantListWrapper: {
+    width: "100%",
+  },
+  participantList: {
+    gap: SPACING.l,
+    width: "100%",
+    alignItems: "center",
   },
   addParticipantButton: {
-    backgroundColor: "#3F3F46",
-    borderRadius: 20,
-    padding: 10,
+    backgroundColor: COLORS.grey,
+    borderRadius: 30,
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: SPACING.m,
+  },
+  buttonsWrapper: {
+    flexDirection: "row",
+    gap: SPACING.l,
+    marginTop: SPACING.l,
   },
 });
