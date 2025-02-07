@@ -2,13 +2,14 @@ import { Button } from "@/components/designSystem/button";
 import { COLORS, FONT_SIZE, SPACING } from "@/components/designSystem/styles";
 import { Participant } from "@/components/participant";
 import { INITIAL_NUMBER_OF_PARTICIPANTS } from "@/utils/constants";
-import { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useRef, useState } from "react";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Index() {
   const [participantsNames, setParticipantsNames] = useState<Array<string>>(
     new Array(INITIAL_NUMBER_OF_PARTICIPANTS).fill("")
   );
+  const lastParticipantRef = useRef<TextInput>(null);
 
   function handleParticipantNameChanged(index: number, newName: string) {
     const newParticipantsNames = [...participantsNames];
@@ -18,6 +19,10 @@ export default function Index() {
 
   function addParticipant() {
     setParticipantsNames([...participantsNames, ""]);
+    // The usage of setTimeout is a bit hacky
+    setTimeout(() => {
+      lastParticipantRef.current?.focus();
+    }, 100);
   }
 
   function removeParticipant(index: number) {
@@ -45,6 +50,9 @@ export default function Index() {
               handleParticipantNameChanged(index, newName)
             }
             handleDelete={() => removeParticipant(index)}
+            ref={
+              index === participantsNames.length - 1 ? lastParticipantRef : null
+            }
           />
         ))}
       </ScrollView>
