@@ -8,7 +8,15 @@ import {
 } from "@/utils/constants";
 import getNewRandomNumber from "@/utils/getNewRandomNumber";
 import { useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function Index() {
   const [participantsNames, setParticipantsNames] = useState<Array<string>>(
@@ -41,12 +49,17 @@ export default function Index() {
   }
 
   function runRandomDraw() {
+    Keyboard.dismiss();
     // Clear previous winner
     if (winnerIndex !== -1) {
       setWinnerIndex(-1);
     }
     // Clear empty participants
     const participants = participantsNames.filter((name) => name.trim() !== "");
+    if (participants.length < 2) {
+      Alert.alert("Au moins 2 participants sont nécessaires");
+      return;
+    }
     if (participants.length < participantsNames.length) {
       setParticipantsNames(participants);
     }
@@ -83,7 +96,6 @@ export default function Index() {
     <View style={styles.mainView}>
       <Text style={styles.title}>RanDOM Plouf</Text>
       <Text style={styles.description}>Ajouter des participants</Text>
-
       <ScrollView
         contentContainerStyle={styles.participantList}
         style={styles.participantListWrapper}
