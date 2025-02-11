@@ -1,6 +1,13 @@
+import { PARTICIPANT_ANIMATION_DURATION } from "@/utils/constants";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { forwardRef } from "react";
+import { forwardRef, useEffect } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { COLORS, FONT_SIZE, SPACING } from "./designSystem/styles";
 
 type ParticipantProps = {
@@ -8,22 +15,76 @@ type ParticipantProps = {
   index: number;
   handleNameChange: (newName: string) => void;
   handleDelete: () => void;
+  isAnimated?: boolean;
+  isWinner?: boolean;
+  isDrawInProgress: boolean;
 };
 
 export const Participant = forwardRef<TextInput, ParticipantProps>(
-  ({ name, index, handleNameChange, handleDelete }, ref) => {
+  (
+    {
+      name,
+      index,
+      handleNameChange,
+      handleDelete,
+      isAnimated,
+      isWinner,
+      isDrawInProgress,
+    },
+    ref
+  ) => {
+    const scale = useSharedValue(1);
+    const opacity = useSharedValue(1);
+
+    const config = {
+      duration: PARTICIPANT_ANIMATION_DURATION,
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+    };
+
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ scale: withTiming(scale.value, config) }],
+        opacity: withTiming(opacity.value, config),
+      };
+    });
+
+    useEffect(() => {
+      if (isAnimated) {
+        scale.value = 1.2;
+        opacity.value = 0.5;
+      } else {
+        scale.value = 1;
+        opacity.value = 1;
+      }
+    }, [isAnimated]);
+
     return (
       <View style={styles.wrapper}>
-        <TextInput
-          value={name}
-          style={styles.input}
-          onChangeText={handleNameChange}
-          placeholder={`Participant ${index + 1}`}
-          ref={ref}
-        />
-        <Pressable onPress={handleDelete}>
-          <FontAwesome6 name="trash" size={16} color={COLORS.white} />
-        </Pressable>
+        {isWinner && (
+          <FontAwesome6
+            name="crown"
+            size={16}
+            color={COLORS.white}
+            style={styles.crownIcon}
+          />
+        )}
+        <Animated.View style={[animatedStyle]}>
+          <TextInput
+            value={name}
+            style={[
+              styles.input,
+              (isWinner || isAnimated) && styles.isSpotlighted,
+            ]}
+            onChangeText={handleNameChange}
+            placeholder={`Participant ${index + 1}`}
+            ref={ref}
+          />
+        </Animated.View>
+        {!isDrawInProgress && (
+          <Pressable onPress={handleDelete}>
+            <FontAwesome6 name="trash" size={16} color={COLORS.white} />
+          </Pressable>
+        )}
       </View>
     );
   }
@@ -43,5 +104,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     backgroundColor: COLORS.white,
+  },
+  isSpotlighted: {
+    backgroundColor: COLORS.purple,
+    color: COLORS.white,
+    fontWeight: "bold",
+  },
+  crownIcon: {
+    position: "absolute",
+    top: 15,
+    left: -25,
   },
 });

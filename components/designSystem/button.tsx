@@ -2,7 +2,11 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
 import { COLORS, FONT_SIZE } from "./styles";
 
-type ButtonProps = { onPress: () => void; style?: ViewStyle } & (
+type ButtonProps = {
+  onPress: () => void;
+  style?: ViewStyle;
+  disabled?: boolean;
+} & (
   | {
       label: string;
       iconName?: never;
@@ -13,7 +17,13 @@ type ButtonProps = { onPress: () => void; style?: ViewStyle } & (
     }
 );
 
-export function Button({ label, iconName, onPress, style }: ButtonProps) {
+export function Button({
+  label,
+  iconName,
+  onPress,
+  style,
+  disabled,
+}: ButtonProps) {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -24,6 +34,7 @@ export function Button({ label, iconName, onPress, style }: ButtonProps) {
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={label ?? iconName}
+      disabled={disabled}
     >
       {({ pressed }) => (
         <Text style={[styles.label, pressed && styles.labelPressed]}>
