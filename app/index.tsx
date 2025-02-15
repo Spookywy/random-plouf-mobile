@@ -1,4 +1,5 @@
 import { Button } from "@/components/designSystem/button";
+import { Page } from "@/components/designSystem/page";
 import { COLORS, FONT_SIZE, SPACING } from "@/components/designSystem/styles";
 import { Participant } from "@/components/participant";
 import {
@@ -7,6 +8,7 @@ import {
   PARTICIPANT_ANIMATION_DURATION,
 } from "@/utils/constants";
 import getNewRandomNumber from "@/utils/getNewRandomNumber";
+import { router } from "expo-router";
 import { useRef, useState } from "react";
 import {
   Alert,
@@ -48,7 +50,7 @@ export default function Index() {
     setParticipantsNames(newParticipantsNames);
   }
 
-  function runRandomDraw() {
+  function validateAndCleanParticipants() {
     Keyboard.dismiss();
     // Clear previous winner
     if (winnerIndex !== -1) {
@@ -57,11 +59,21 @@ export default function Index() {
     // Clear empty participants
     const participants = participantsNames.filter((name) => name.trim() !== "");
     if (participants.length < 2) {
-      Alert.alert("Au moins 2 participants sont nécessaires");
-      return;
+      return null;
     }
     if (participants.length < participantsNames.length) {
       setParticipantsNames(participants);
+    }
+
+    return participants;
+  }
+
+  function runRandomDraw() {
+    const participants = validateAndCleanParticipants();
+
+    if (!participants) {
+      Alert.alert("Au moins 2 participants sont nécessaires");
+      return;
     }
 
     setIsDrawInProgress(true);
@@ -92,8 +104,21 @@ export default function Index() {
     }, PARTICIPANT_ANIMATION_DURATION * NUMBER_OF_PARTICIPANT_ANIMATION);
   }
 
+  function navigateToTeamsPage() {
+    const participants = validateAndCleanParticipants();
+
+    if (!participants) {
+      Alert.alert("Au moins 2 participants sont nécessaires");
+      return;
+    }
+    router.push({
+      pathname: "/teams",
+      params: { participants },
+    });
+  }
+
   return (
-    <View style={styles.mainView}>
+    <Page>
       <Text style={styles.title}>RanDOM Plouf</Text>
       <Text style={styles.description}>Ajouter des participants</Text>
       <ScrollView
@@ -133,22 +158,16 @@ export default function Index() {
           disabled={isDrawInProgress}
         />
         <Button
-          label="Créer 2 équipes"
-          onPress={() => {}}
+          label="Créer des équipes"
+          onPress={navigateToTeamsPage}
           disabled={isDrawInProgress}
         />
       </View>
-    </View>
+    </Page>
   );
 }
 
 const styles = StyleSheet.create({
-  mainView: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: COLORS.nightGrey,
-    paddingVertical: 12,
-  },
   title: {
     fontSize: FONT_SIZE.xxl,
     fontWeight: "bold",
