@@ -1,5 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { COLORS, FONT_SIZE, SPACING } from "./designSystem/styles";
+import { useTranslation } from "@/utils/useTranslation";
+import { fr } from "./fr";
+import { en } from "./en";
 
 type TeamProps = {
   teamNumber: number;
@@ -7,9 +10,11 @@ type TeamProps = {
 };
 
 export function Team({ teamNumber, members }: TeamProps) {
+  const { t } = useTranslation({ fr, en });
+
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.teamTitle}>Équipe {teamNumber}</Text>
+      <Text style={styles.teamTitle}>{t("team.title", { teamNumber })}</Text>
       {members.map((member, index) => (
         <Text style={styles.teamMember} key={index}>
           {member}

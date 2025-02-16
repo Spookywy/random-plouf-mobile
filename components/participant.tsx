@@ -9,6 +9,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { COLORS, FONT_SIZE, SPACING } from "./designSystem/styles";
+import { useTranslation } from "@/utils/useTranslation";
+import { fr } from "./fr";
+import { en } from "./en";
 
 type ParticipantProps = {
   name: string;
@@ -31,8 +34,9 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
       isWinner,
       isDrawInProgress,
     },
-    ref
+    ref,
   ) => {
+    const { t } = useTranslation({ fr, en });
     const scale = useSharedValue(1);
     const opacity = useSharedValue(1);
 
@@ -76,7 +80,7 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
               (isWinner || isAnimated) && styles.isSpotlighted,
             ]}
             onChangeText={handleNameChange}
-            placeholder={`Participant ${index + 1}`}
+            placeholder={t("participant.placeholder", { index: index + 1 })}
             ref={ref}
           />
         </Animated.View>
@@ -87,7 +91,7 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
         )}
       </View>
     );
-  }
+  },
 );
 
 const styles = StyleSheet.create({

@@ -7,8 +7,12 @@ import Slider from "@react-native-community/slider";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { en } from "./en";
+import { fr } from "./fr";
+import { useTranslation } from "@/utils/useTranslation";
 
 export default function Teams() {
+  const { t } = useTranslation({ fr, en });
   const [participantsNames, setParticipantsNames] = useState<string[]>([]);
   const [numberOfTeams, setNumberOfTeams] = useState<number>(3);
   const [teams, setTeams] = useState<Array<Array<string>>>([]);
@@ -31,7 +35,7 @@ export default function Teams() {
 
     const teams = Array.from<string[], string[]>(
       { length: numberOfTeamToCreate },
-      () => []
+      () => [],
     );
 
     for (let i = 0; i < shuffledParticipants.length; i++) {
@@ -43,8 +47,8 @@ export default function Teams() {
 
   return (
     <Page>
-      <Text style={styles.title}>Créer des équipes</Text>
-      <Text style={styles.description}>Nombre d’équipe</Text>
+      <Text style={styles.title}>{t("title")}</Text>
+      <Text style={styles.description}>{t("numberOfTeams")}</Text>
       <Text style={styles.numberOfTeams}>{numberOfTeams}</Text>
       <Slider
         minimumValue={2}
@@ -58,9 +62,9 @@ export default function Teams() {
         onValueChange={setNumberOfTeams}
       />
       <View style={styles.buttonsWrapper}>
-        <Button label="Retour" onPress={() => router.back()} />
+        <Button label={t("back")} onPress={() => router.back()} />
         <Button
-          label={`Créer ${numberOfTeams} équipes`}
+          label={t("createTeams", { numberOfTeams })}
           onPress={createTeams}
         />
       </View>

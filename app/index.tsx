@@ -19,10 +19,14 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { en } from "./en";
+import { fr } from "./fr";
+import { useTranslation } from "@/utils/useTranslation";
 
 export default function Index() {
+  const { t } = useTranslation({ fr, en });
   const [participantsNames, setParticipantsNames] = useState<Array<string>>(
-    new Array(INITIAL_NUMBER_OF_PARTICIPANTS).fill("")
+    new Array(INITIAL_NUMBER_OF_PARTICIPANTS).fill(""),
   );
   const [isDrawInProgress, setIsDrawInProgress] = useState<boolean>(false);
   const [participantToAnimate, setParticipantToAnimate] = useState<number>(-1);
@@ -72,7 +76,7 @@ export default function Index() {
     const participants = validateAndCleanParticipants();
 
     if (!participants) {
-      Alert.alert("Au moins 2 participants sont nécessaires");
+      Alert.alert(t("notEnoughParticipants"));
       return;
     }
 
@@ -88,7 +92,7 @@ export default function Index() {
       setParticipantToAnimate(newRandomNumber);
       newRandomNumber = getNewRandomNumber(
         participants.length,
-        newRandomNumber
+        newRandomNumber,
       );
     }, PARTICIPANT_ANIMATION_DURATION);
 
@@ -108,7 +112,7 @@ export default function Index() {
     const participants = validateAndCleanParticipants();
 
     if (!participants) {
-      Alert.alert("Au moins 2 participants sont nécessaires");
+      Alert.alert(t("notEnoughParticipants"));
       return;
     }
     router.push({
@@ -120,7 +124,7 @@ export default function Index() {
   return (
     <Page>
       <Text style={styles.title}>RanDOM Plouf</Text>
-      <Text style={styles.description}>Ajouter des participants</Text>
+      <Text style={styles.description}>{t("addParticipants")}</Text>
       <ScrollView
         contentContainerStyle={styles.participantList}
         style={styles.participantListWrapper}
@@ -153,12 +157,12 @@ export default function Index() {
       />
       <View style={styles.buttonsWrapper}>
         <Button
-          label="Tirer au sort"
+          label={t("runDraw")}
           onPress={runRandomDraw}
           disabled={isDrawInProgress}
         />
         <Button
-          label="Créer des équipes"
+          label={t("createTeams")}
           onPress={navigateToTeamsPage}
           disabled={isDrawInProgress}
         />
