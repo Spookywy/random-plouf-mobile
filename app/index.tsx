@@ -8,6 +8,7 @@ import {
   PARTICIPANT_ANIMATION_DURATION,
 } from "@/utils/constants";
 import getNewRandomNumber from "@/utils/getNewRandomNumber";
+import { useTranslation } from "@/utils/useTranslation";
 import { router } from "expo-router";
 import { useRef, useState } from "react";
 import {
@@ -21,12 +22,11 @@ import {
 } from "react-native";
 import { en } from "./en";
 import { fr } from "./fr";
-import { useTranslation } from "@/utils/useTranslation";
 
 export default function Index() {
   const { t } = useTranslation({ fr, en });
   const [participantsNames, setParticipantsNames] = useState<Array<string>>(
-    new Array(INITIAL_NUMBER_OF_PARTICIPANTS).fill(""),
+    new Array(INITIAL_NUMBER_OF_PARTICIPANTS).fill("")
   );
   const [isDrawInProgress, setIsDrawInProgress] = useState<boolean>(false);
   const [participantToAnimate, setParticipantToAnimate] = useState<number>(-1);
@@ -41,6 +41,7 @@ export default function Index() {
   }
 
   function addParticipant() {
+    if (winnerIndex !== -1) setWinnerIndex(-1);
     setParticipantsNames([...participantsNames, ""]);
     // The usage of setTimeout is a bit hacky
     setTimeout(() => {
@@ -49,6 +50,7 @@ export default function Index() {
   }
 
   function removeParticipant(index: number) {
+    if (winnerIndex !== -1) setWinnerIndex(-1);
     const newParticipantsNames = [...participantsNames];
     newParticipantsNames.splice(index, 1);
     setParticipantsNames(newParticipantsNames);
@@ -57,9 +59,7 @@ export default function Index() {
   function validateAndCleanParticipants() {
     Keyboard.dismiss();
     // Clear previous winner
-    if (winnerIndex !== -1) {
-      setWinnerIndex(-1);
-    }
+    if (winnerIndex !== -1) setWinnerIndex(-1);
     // Clear empty participants
     const participants = participantsNames.filter((name) => name.trim() !== "");
     if (participants.length < 2) {
@@ -92,7 +92,7 @@ export default function Index() {
       setParticipantToAnimate(newRandomNumber);
       newRandomNumber = getNewRandomNumber(
         participants.length,
-        newRandomNumber,
+        newRandomNumber
       );
     }, PARTICIPANT_ANIMATION_DURATION);
 
