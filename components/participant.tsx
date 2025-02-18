@@ -1,4 +1,5 @@
 import { PARTICIPANT_ANIMATION_DURATION } from "@/utils/constants";
+import { useTranslation } from "@/utils/useTranslation";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { forwardRef, useEffect } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
@@ -9,9 +10,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { COLORS, FONT_SIZE, SPACING } from "./designSystem/styles";
-import { useTranslation } from "@/utils/useTranslation";
-import { fr } from "./fr";
 import { en } from "./en";
+import { fr } from "./fr";
 
 type ParticipantProps = {
   name: string;
@@ -34,7 +34,7 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
       isWinner,
       isDrawInProgress,
     },
-    ref,
+    ref
   ) => {
     const { t } = useTranslation({ fr, en });
     const scale = useSharedValue(1);
@@ -82,6 +82,7 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
             onChangeText={handleNameChange}
             placeholder={t("participant.placeholder", { index: index + 1 })}
             ref={ref}
+            editable={!isDrawInProgress}
           />
         </Animated.View>
         {!isDrawInProgress && (
@@ -91,7 +92,7 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
         )}
       </View>
     );
-  },
+  }
 );
 
 const styles = StyleSheet.create({
