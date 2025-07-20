@@ -34,7 +34,7 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
       isWinner,
       isDrawInProgress,
     },
-    ref
+    ref,
   ) => {
     const { t } = useTranslation({ fr, en });
     const scale = useSharedValue(1);
@@ -83,6 +83,7 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
             placeholder={t("participant.placeholder", { index: index + 1 })}
             ref={ref}
             editable={!isDrawInProgress}
+            placeholderTextColor={COLORS.lightGrey}
           />
         </Animated.View>
         {!isDrawInProgress && (
@@ -92,7 +93,7 @@ export const Participant = forwardRef<TextInput, ParticipantProps>(
         )}
       </View>
     );
-  }
+  },
 );
 
 const styles = StyleSheet.create({

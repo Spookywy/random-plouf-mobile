@@ -3,6 +3,7 @@ export const COLORS = {
   grey: "#3F3F46",
   white: "#F5F5F5",
   purple: "#8b5cf6",
+  lightGrey: "#7F7F7F",
 };
 
 export const SPACING = {
